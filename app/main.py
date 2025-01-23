@@ -1,9 +1,6 @@
 from fastapi import FastAPI
-from app.api.v1.endpoints import staffs
-from app.db.base import Base
-from app.db.session import engine
-# create all tables
-Base.metadata.create_all(bind=engine)
+from app.api.v1.endpoints import users, slot, auth
+from app.db.session import init_db
 
 
 app = FastAPI(
@@ -14,4 +11,11 @@ app = FastAPI(
 
 # include routers
 
-app.include_router(staffs.router,)
+app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
+app.include_router(slot.router, prefix="/api/v1/slots", tags=["slots"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+
+@app.on_event("startup")
+
+async def startup():
+    await init_db(app)
