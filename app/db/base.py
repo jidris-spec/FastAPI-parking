@@ -9,3 +9,4 @@ class Base:
     @declared_attr
     def _tablename_(cls) -> str:
         return cls._name_.lower()
+    
