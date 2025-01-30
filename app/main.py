@@ -17,5 +17,5 @@ app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 
 @app.on_event("startup")
 
-async def startup():
-    await init_db(app)
+def startup():
+    init_db()

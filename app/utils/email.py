@@ -6,9 +6,10 @@ conf = ConnectionConfig(
     MAIL_FROM=settings.EMAIL_SENDER,
     MAIL_PORT=settings.SMTP_PORT,
     MAIL_SERVER=settings.SMTP_SERVER,
-    MAIL_TLS=True,
-    MAIL_SSL=False,
-    USE_CREDENTIALS=True
+    MAIL_STARTTLS=True,  # Use this instead of MAIL_TLS
+    MAIL_SSL_TLS=False,  # Use this instead of MAIL_SSL
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=True
 )
 
 async def send_email(subject: str, email_to: str, body: str):

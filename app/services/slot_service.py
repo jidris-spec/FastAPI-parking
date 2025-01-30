@@ -1,7 +1,7 @@
 # app/services/user_service.py
 from sqlalchemy.orm import Session
 from app.db.repositories.slot_repository import SlotRepository
-from app.schemas.user import SlotCreate, SlotUpdate,SlotResponse
+from app.schemas.slot import SlotCreate, SlotUpdate,SlotResponse
 from app.utils.email import send_email
 
 class SlotService:
@@ -22,7 +22,7 @@ class SlotService:
         return slot
 
         
-        def get_slot_by_id(self, slot_id: int):
+    def get_slot_by_id(self, slot_id: int):
             slot = self.slot_repository.get_slot_by_id(slot_id)
             if not slot:
                 raise ValueError("slot not found")

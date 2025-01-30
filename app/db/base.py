@@ -7,6 +7,6 @@ class Base:
 
     # Automatically generate _tablename_
     @declared_attr
-    def _tablename_(cls) -> str:
-        return cls._name_.lower()
+    def __tablename__(cls) -> str:
+        return cls.__name__.lower()
     
