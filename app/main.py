@@ -12,7 +12,7 @@ app = FastAPI(
 # include routers
 
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
-# app.include_router(slot.router, prefix="/api/v1/slots", tags=["slots"])
+app.include_router(slot.router, prefix="/api/v1/slots", tags=["slots"])
 # app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 
 @app.on_event("startup")

@@ -32,4 +32,4 @@ class SlotResponse(SlotBase):
     id: int = Field(..., description="Unique identifier of the parking slot.")
     
     class Config:
-        orm_mode = True  # Enables compatibility with ORM objects.
+        from_attributes = True

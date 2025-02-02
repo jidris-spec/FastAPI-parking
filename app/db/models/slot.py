@@ -1,35 +1,15 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+# app/db/models/slot.py
 
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+from app.db.base import Base  # Ensure that the Base class is properly imported
 
-class SlotBase(BaseModel):
-    """
-    Shared properties for parking slots.
-    """
-    slot_number: str = Field(..., description="The unique identifier for the parking slot.")
-    is_available: bool = Field(..., description="Indicates if the parking slot is currently available.")
-    lot_id: int = Field(..., description="ID of the parking lot where this slot belongs.")
+class Slot(Base):
+    __tablename__ = "slots"
 
+    id = Column(Integer, primary_key=True, index=True)
+    slot_number = Column(String, unique=True, nullable=False)
+    is_available = Column(Boolean, default=True, nullable=False)
+    lot_id = Column(Integer, ForeignKey("parking_lots.id"), nullable=False)
 
-class SlotCreate(SlotBase):
-    """
-    Properties required for creating a new parking slot.
-    """
-    pass  # Inherits all fields from SlotBase; additional fields can be added if needed.
-
-
-class SlotUpdate(BaseModel):
-    """
-    Properties for updating a parking slot.
-    """
-    is_available: Optional[bool] = Field(None, description="Update the availability of the slot.")
-
-
-class SlotResponse(SlotBase):
-    """
-    Properties returned in response to slot-related endpoints.
-    """
-    id: int = Field(..., description="Unique identifier of the parking slot.")
-    
-    class Config:
-        orm_mode = True  # Enables compatibility with ORM objects.
+    lot = relationship("ParkingLot", back_populates="slots")

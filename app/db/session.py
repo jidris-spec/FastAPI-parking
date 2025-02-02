@@ -9,6 +9,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def init_db():
     import app.db.models.user  # Import models
     import app.db.models.slot
+    import app.db.models.booking
+    import app.db.models.parking_lot
     Base.metadata.create_all(bind=engine)
 
 def get_db():

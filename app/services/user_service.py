@@ -6,7 +6,7 @@ from app.core.security import hash_password, verify_password, create_access_toke
 from app.utils.email import send_email
 
 class UserService:
-    def __init__(self, db: Session):  # Corrected __init__ method
+    def __init__(self, db: Session): 
         self.user_repository = UserRepository(db)
 
     def create_user(self, user_data: UserCreate):

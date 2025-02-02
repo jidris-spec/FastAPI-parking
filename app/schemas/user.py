@@ -30,4 +30,5 @@ class UserLogin(UserBase):
     password: str = Field(..., min_length=8, description="User's password.")
     
     class Config:
-        orm_mode = True  # Enables compatibility with ORM objects.
+        class Config:
+            from_attributes = True
