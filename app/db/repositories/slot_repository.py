@@ -1,32 +1,36 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from app.db.session import get_db
+
+from sqlalchemy.orm import Session
 from app.db.models.slot import Slot
-from app.schemas.slot import SlotCreate, SlotResponse
 
-router = APIRouter()
+class SlotRepository:
+    def _init_(self, db: Session):
+        self.db = db
 
-@router.post("/", response_model=SlotResponse, summary="Create a new parking slot")
-async def create_slot(slot_data: SlotCreate, db: AsyncSession = Depends(get_db)):
-    # Check if a slot with the same identifier already exists (optional validation)
-    existing_slot = await db.execute(select(Slot).filter(Slot.identifier == slot_data.identifier))
-    if existing_slot.scalars().first():
-        raise HTTPException(status_code=400, detail="A slot with this identifier already exists")
+    def create_slot(self,owner_id:int, price_per_hour:int, slot_capacity:str, address:str, slot_tag:str ) -> Slot:
+        slot = Slot(owner_id=owner_id, price_per_hour=price_per_hour, slot_capacity=slot_capacity, address=address, slot_tag=slot_tag)
+        self.db.add(slot)
+        self.db.commit()
+        self.db.refresh(slot)
+        return slot
+
+    def get_slot_by_id(self, slot_id: str) -> Slot:
+        return self.db.query(Slot).filter(Slot.id == slot_id).first()
     
-    # Create a new parking slot
-    new_slot = Slot(
-        identifier=slot_data.identifier,
-        is_available=True,  # Default to available
-        price_per_hour=slot_data.price_per_hour
-    )
-    db.add(new_slot)
-    await db.commit()
-    await db.refresh(new_slot)
-    return new_slot
-
-@router.get("/", response_model=list[SlotResponse], summary="List all parking slots")
-async def list_slots(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Slot))
-    slots = result.scalars().all()
-    return slots
+    def get_all_slots(self):
+        return self.db.query(Slot).all()
+    
+    def update_slot(self, slot_id: str, owner_id:int = None, price_per_hour:int = None, slot_capacity:str = None, address:str = None, is_available:bool=True) -> Slot:
+        slot = self.get_slot_by_id(slot_id)
+        if owner_id:
+            slot.owner_id = owner_id
+        if price_per_hour:
+            slot.price_per_hour = price_per_hour
+        if slot_capacity:
+            slot.slot_capacity = slot_capacity
+        if address:
+            slot.address = address
+        if is_available:
+            slot.is_available = is_available
+        self.db.commit()
+        self.db.refresh(slot)
+        return slot

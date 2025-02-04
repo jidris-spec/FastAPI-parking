@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import optional 
+from typing import Optional 
 from datetime import datetime
 
 class BookingBase(BaseModel):
@@ -25,8 +25,8 @@ class BookingUpdate(BaseModel):
     """
         properties that can be updated in the booking
     """
-    price: optional[float] = Field(None, description="updated price of the booking.")
-    status: optional[str] = Field(None, description="updated status of the booking (e.g active, canceled )")
+    price: Optional[float] = Field(None, description="updated price of the booking.")
+    status: Optional[str] = Field(None, description="updated status of the booking (e.g active, canceled )")
 
 class BookingResponse(BookingBase):
 
