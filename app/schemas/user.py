@@ -21,16 +21,17 @@ class UserUpdate(BaseModel):
     """
     Properties for updating a parking slot.
     """
-    is_available: Optional[bool] = Field(None, description="Update the availability of the user.")
-    price_per_hour: Optional[int] = Field(None, description="Update the price per hour of the user.")
-    address: Optional[str] = Field(None, description="Update the address of the user.")
+    id:int = Field(..., description="User id")
+    is_admin: Optional[bool] = Field(None, description="Update user role.")
+    phone: Optional[str] = Field(None, description="Update user phone number")
+    username: Optional[str] = Field(None, description="Update user username")
 class UserResponse(UserBase):
     """
     Properties returned in response to user-related endpoints.
     """
     id: int = Field(..., description="Unique identifier of the user.")
     is_admin: bool = Field(..., description="Indicates if the user's account is active.")
-
+   
 class UserLogin(UserBase):
     """
     Properties required for logging in a  user.

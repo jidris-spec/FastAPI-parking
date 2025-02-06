@@ -12,23 +12,25 @@ class BookingRepository:
         self.db.refresh(booking)
         return booking
 
-def update_booking(self, booking_id: int, price: int = None, slot_id: int = None) -> Booking:
-    booking = self.db.query(Booking).filter(Booking.id == booking_id).first()
-    if not booking:
-        return None  # Handle case where booking doesn't exist.
+    def update_booking(self, booking_id: int, price: int = None, slot_id: int = None, status:str = 'active') -> Booking:
+        booking = self.db.query(Booking).filter(Booking.id == booking_id).first()
+        if not booking:
+            return None  # Handle case where booking doesn't exist.
 
-    if price is not None:
-        booking.price = price
-    if slot_id is not None:
-        booking.slot_id = slot_id
+        if price is not None:
+            booking.price = price
+        if slot_id is not None:
+            booking.slot_id = slot_id
+        if status is not None:
+            booking.status = status
 
-    self.db.commit()  # Save changes to the database.
-    self.db.refresh(booking)  # Refresh to get updated data.
-    return booking
+        self.db.commit()  # Save changes to the database.
+        self.db.refresh(booking)  # Refresh to get updated data.
+        return booking
 
 
-def get_booking_by_id(self, booking_id: int) -> Booking:
+    def get_booking_by_id(self, booking_id: int) -> Booking:
         return self.db.query(Booking).filter(Booking.id == booking_id).first()
-    
-def get_all_bookings(self):
+        
+    def get_all_bookings(self):
         return self.db.query(Booking).all()

@@ -4,15 +4,17 @@ from app.schemas.slot import SlotCreate, SlotUpdate,SlotResponse
 from app.utils.email import send_email
 
 class SlotService:
-    def _init_(self, db: Session):
+    def __init__(self, db: Session):
         self.slot_repository = SlotRepository(db)
 
     def create_slot(self, slot_data: SlotCreate):
-        existing_slot = self.slot_repository.get_slot_by_id(slot_data.slot_tag)
+        existing_slot = self.slot_repository.get_slot_by_tag(slot_data.slot_tag)
         if existing_slot:
             raise ValueError("slot with this id already exists")
         
         slot = self.slot_repository.create_slot(
+            owner_id=slot_data.owner_id,
+            price_per_hour=slot_data.price_per_hour,
             slot_tag=slot_data.slot_tag,
             address=slot_data.address,
             slot_capacity=slot_data.slot_capacity,

@@ -25,6 +25,7 @@ class BookingUpdate(BaseModel):
     """
         properties that can be updated in the booking
     """
+    slot_id:Optional[int] = Field(None, description="Booking slot"),
     price: Optional[float] = Field(None, description="updated price of the booking.")
     status: Optional[str] = Field(None, description="updated status of the booking (e.g active, canceled )")
 
@@ -35,7 +36,7 @@ class BookingResponse(BookingBase):
     """
 
     id: int = Field(...,description="Unique identifier for the booking.")
-    created_at: datetime = Field(...,description="Timestamp when the booking was created.")
+    status: str = Field(...,description="The status of the booking (e.g active, canceled ).")
 
     class Config:
         class Config:

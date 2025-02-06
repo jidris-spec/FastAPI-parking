@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer,String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -8,7 +8,4 @@ class Booking(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     slot_id = Column(Integer, ForeignKey("slots.id"))
     price = Column(Integer)
-
-
-    # user = relationship("User", back_populates="bookings")
-    # slot = relationship("Slot", back_populates="bookings")
+    status = Column(String, default="active", nullable=False)

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.db.session import init_db
-from app.api.v1.endpoints import  users, slot
+from app.api.v1.endpoints import  users, slot, booking
 
 
 
@@ -13,7 +13,7 @@ app = FastAPI(
 # include routers
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(slot.router, prefix="/api/v1/slots", tags=["slots"])
-# app.include_router(booking.router, prefix="/api/v1/booking", tags=["booking"])
+app.include_router(booking.router, prefix="/api/v1/bookings", tags=["bookings"])
 
 # app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 

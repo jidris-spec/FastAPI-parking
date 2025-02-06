@@ -1,7 +1,7 @@
 # app/services/user_service.py
 from sqlalchemy.orm import Session
 from app.db.repositories.user_repository import UserRepository
-from app.schemas.user import UserCreate, UserLogin
+from app.schemas.user import UserCreate, UserLogin,UserUpdate
 from app.core.security import hash_password, verify_password, create_access_token
 from app.utils.email import send_email
 
@@ -24,9 +24,6 @@ class UserService:
             phone=user_data.phone
         )
 
-        # Send welcome email
-        # send_email("Welcome to jidtech Car Parking System!", user.email, "Thank you for registering.")
-        print(user)
         return user
 
     def login_user(self, user_data: UserLogin):
@@ -52,3 +49,18 @@ class UserService:
 
     def get_user_by_id(self, user_id: int):
         return self.user_repository.get_user_by_id(user_id)
+    
+    def get_all_users(self):
+        return self.user_repository.get_all_users()
+    
+    def update_user(self,user_id:int,user_data:UserUpdate):
+        user = self.get_user_by_id(user_id)
+        if not user:
+            raise ValueError("User not found")
+        user = self.user_repository.update_user(
+        phone=user_data.phone,
+        is_admin=user_data.is_admin,
+        username=user_data.username,
+        user_id=user_id
+        )
+        return user

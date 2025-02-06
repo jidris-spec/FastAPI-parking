@@ -28,6 +28,7 @@ class SlotUpdate(BaseModel):
     is_available: Optional[bool] = Field(None, description="Update the availability of the slot.")
     price_per_hour: Optional[int] = Field(None, description="Update the price per hour of the slot.")
     address: Optional[str] = Field(None, description="Update the address of the slot.")
+    slot_capacity: Optional[int] = Field(None, description="Update the capacity of the slot.")
     
 
 

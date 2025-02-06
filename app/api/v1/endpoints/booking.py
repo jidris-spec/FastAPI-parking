@@ -20,7 +20,7 @@ def get_all_bookings(db: Session = Depends(get_db)):
     return booking_service.get_all_bookings()
 
     # update bookings
-@router.put("/{slot_id}", response_model=BookingResponse, summary="update the booking")
+@router.patch("/{slot_id}", response_model=BookingResponse, summary="update the booking")
 def update_booking(booking_id: int, booking_data: BookingUpdate, db:Session = Depends(get_db)):
     booking_service =BookingService(db)
     return booking_service.update_booking(booking_id, booking_data)

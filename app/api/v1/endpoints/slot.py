@@ -16,7 +16,7 @@ def get_all_slots(db: Session = Depends(get_db)):
     slot_service = SlotService(db)
     return slot_service.get_all_slots()
 
-@router.put("/{slot_id}", response_model=SlotResponse, summary="Update a parking slot")
+@router.patch("/{slot_id}", response_model=SlotResponse, summary="Update a parking slot")
 def update_slot(slot_id: int, slot_data: SlotUpdate, db: Session = Depends(get_db)):
     slot_service = SlotService(db)
     return slot_service.update_slot(slot_id, slot_data)

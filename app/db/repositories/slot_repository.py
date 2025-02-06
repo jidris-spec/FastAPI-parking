@@ -3,18 +3,20 @@ from sqlalchemy.orm import Session
 from app.db.models.slot import Slot
 
 class SlotRepository:
-    def _init_(self, db: Session):
+    def __init__(self, db: Session):
         self.db = db
 
-    def create_slot(self,owner_id:int, price_per_hour:int, slot_capacity:str, address:str, slot_tag:str ) -> Slot:
-        slot = Slot(owner_id=owner_id, price_per_hour=price_per_hour, slot_capacity=slot_capacity, address=address, slot_tag=slot_tag)
+    def create_slot(self,owner_id:int, price_per_hour:int, slot_capacity:int, address:str, slot_tag:str ) -> Slot:
+        slot = Slot(address=address, price_per_hour=price_per_hour,owner_id=owner_id, slot_capacity=slot_capacity, slot_tag=slot_tag)
         self.db.add(slot)
         self.db.commit()
         self.db.refresh(slot)
         return slot
 
-    def get_slot_by_id(self, slot_id: str) -> Slot:
-        return self.db.query(Slot).filter(Slot.id == slot_id).first()
+    def get_slot_by_tag(self, slot_tag: str) -> Slot:
+        return self.db.query(Slot).filter(Slot.slot_tag == slot_tag).first()
+    def get_slot_by_id(self, id: int) -> Slot:
+        return self.db.query(Slot).filter(Slot.id == id).first()
     
     def get_all_slots(self):
         return self.db.query(Slot).all()
