@@ -82,5 +82,4 @@ This project is licensed under the MIT License.
 ## 📞 Contact
 For support or inquiries:
 - **GitHub**: [jidris-spec](https://github.com/jidris-spec)
-- **Email**: your-email@example.com
 
