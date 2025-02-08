@@ -1,6 +1,9 @@
 from sqlalchemy.orm import Session
 from app.db.models.user import User
 from app.schemas.user import UserUpdate
+from datetime import datetime, timedelta
+import secrets
+from app.utils.utils import hash_password  
 
 class UserRepository:
     def __init__(self, db: Session):
@@ -36,3 +39,31 @@ class UserRepository:
             return user
         else:
             return None  # Handle case where user doesn't exist.
+    
+    def generate_reset_token():
+        return secrets.token_urlsafe(32)
+        
+@staticmethod    
+def set_reset_token(db: Session, user: User): # Store Reset Token in Database
+        token = UserRepository.generate_reset_token()
+        user.reset_token = token
+        user.reset_token_expiry = datetime.utcnow() + timedelta(minutes=10)
+        db.commit()
+        return token
+
+
+def verify_reset_token(db: Session, token: str):
+        user = db.query(User).filter(User.reset_token ==token).first()
+        if user and user.reset_token_expiry > datetime.utcnow():
+            return user
+        return None
+
+def update_password(db: Session, user: User, new_password: str):
+        user.hashed_password = hash_password(new_password)
+        user.reset_token = None 
+        user.reset_token_expiry = None
+        db.commit()
+    
+    
+
+    

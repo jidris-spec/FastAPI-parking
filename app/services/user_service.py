@@ -1,10 +1,12 @@
 # app/services/user_service.py
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from app.db.models.user import User
 from app.db.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate, UserLogin,UserUpdate
 from app.core.security import hash_password, verify_password, create_access_token
 from app.utils.email import send_email
-
+# from utils import send_email
 class UserService:
     def __init__(self, db: Session): 
         self.user_repository = UserRepository(db)
@@ -64,3 +66,20 @@ class UserService:
         user_id=user_id
         )
         return user
+    def request_password_reset(self, db: Session, email: str):
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")  
+        
+        token = UserRepository.set_reset_token(db, user)
+        reset_link = f"http://localhost:8000/reset-password?token={token}"
+        send_email(user.email, "password Rest", f"Click the link to reset your password: {reset_link}")
+        return {"message": "password reset link has been sent to your email"}
+    
+    def reset_password(self, db: Session, token: str, new_password: str):
+        user = UserRepository.verify_reset_token(db, token) 
+        if not user:
+            raise HTTPException(status_code=400, detail="Invalid or expires token")
+        
+        UserRepository.update_password(db, user, new_password)
+        return {"message": "password reset successfully"}

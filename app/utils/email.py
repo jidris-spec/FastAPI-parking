@@ -21,3 +21,8 @@ async def send_email(subject: str, email_to: str, body: str):
     )
     fm = FastMail(conf)
     await fm.send_message(message)
+
+async def send_reset_email(email_to: str, reset_link: str):
+    subject = "Password Reset Request"
+    body = f"Click the following link to reset your password: {reset_link}"
+    await send_email(subject, email_to, body)
