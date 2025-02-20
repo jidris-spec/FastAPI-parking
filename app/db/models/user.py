@@ -9,5 +9,3 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
     username = Column(String)
     phone = Column(String)
-    reset_token = Column(String, nullable=True)
-    reset_token_expiry = Column(DateTime, nullable=True)
