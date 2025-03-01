@@ -1,0 +1,28 @@
+
+services:
+  app:
+    build: .  # Build the FastAPI app using the Dockerfile in the current directory
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"  # Map container's port 8000 to host's port 8000
+    volumes:
+      - .:/app  # Mount the current directory into the container
+    environment:
+      DATABASE_URL: postgres://user:password@postgres_db:5432/mydatabase  # PostgreSQL connection string
+    depends_on:
+      - postgres_db  # Make sure the app waits for the PostgreSQL service
+
+  postgres_db:
+    image: postgres:latest  # Use the official PostgreSQL image
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user  # Username for the database
+      POSTGRES_PASSWORD: password  # Password for the database
+      POSTGRES_DB: mydatabase  # Database name
+    ports:
+      - "5432:5432"  # Map container's port 5432 to host's port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Volume for PostgreSQL data to persist
+
+volumes:
+  postgres_data:  # Define the volume to persist PostgreSQL data
